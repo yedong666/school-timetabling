@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
+
 @SpringBootTest
 class ManageSystemApplicationTests {
     @Autowired
@@ -31,6 +33,12 @@ class ManageSystemApplicationTests {
         studentShouldSelectSubject.setStudentId(1);
         studentShouldSelectSubject.setSubjectId(1);
         studentShouldSelectSubjectMapper.insert(studentShouldSelectSubject);
+    }
+
+    @Test
+    void test1(){
+        List<Integer> list = studentShouldSelectSubjectMapper.getStudentIdsSelectSubject("离散数学");
+        System.out.println(list);
     }
 
 }
