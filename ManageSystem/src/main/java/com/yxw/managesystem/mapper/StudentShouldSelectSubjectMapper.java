@@ -3,6 +3,9 @@ package com.yxw.managesystem.mapper;
 import com.yxw.managesystem.entity.StudentShouldSelectSubject;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -14,5 +17,5 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface StudentShouldSelectSubjectMapper extends BaseMapper<StudentShouldSelectSubject> {
-
+    List<Integer> getStudentIdsSelectSubject(@Param("subjectName") String subjectName);
 }
