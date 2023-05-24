@@ -19,7 +19,7 @@ public class MbgUtil {
 
 
     //需修改为自己的项目路径
-    private final static String projectPath = "D://code//project//ManageSystem";
+    private final static String projectPath = "D://code//project//school-timetabling//ManageSystem";
 
     private final static String packagePath = "com.yxw.managesystem";
 
