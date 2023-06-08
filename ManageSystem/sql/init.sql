@@ -5,11 +5,23 @@ CREATE TABLE student
 (
     student_id INT NOT NULL AUTO_INCREMENT COMMENT '学生id',
     student_name  varchar(20) NOT NULL COMMENT '用户名',
-    student_grade INT NOT NULL COMMENT '学生年级',
+    student_enter_time DATETIME NOT NULL COMMENT '入学时间',
+    student_year_no tinyint GENERATED ALWAYS AS (TIMESTAMPDIFF(MONTH, student_enter_time, now()) / 6 + 1),
     student_class INT NOT NULL COMMENT '学生班级', #班级的作用?
+    major_id INT NOT NULL COMMENT '专业id',
     PRIMARY KEY (`student_id`)
 )ENGINE = InnoDB
  DEFAULT CHARSET = utf8 COMMENT ='学生表';
+
+drop table if exists manage_system.training_plan;
+CREATE TABLE training_plan(
+    training_plan_id  INT NOT NULL AUTO_INCREMENT COMMENT '主键',
+    major_id INT  NOT NULL COMMENT '专业id',
+    year_no TINYINT NOT NULL COMMENT '学年(1、2....8)',
+    subject_id INT NOT NULL ,
+    PRIMARY KEY (`training_plan_id`)
+)ENGINE = InnoDB
+ DEFAULT CHARSET = utf8 COMMENT ='培养计划表';
 
 drop table if exists manage_system.subject;
 CREATE TABLE subject
@@ -17,6 +29,8 @@ CREATE TABLE subject
     subject_id   INT NOT NULL AUTO_INCREMENT COMMENT '科目(学科)id',
     subject_name varchar(50)                NOT NULL,
     subject_desc varchar(200)                NOT NULL,
+    subject_stu_capacity INT DEFAULT 50 COMMENT '对应开设课程最大选课人数',
+    subject_type TINYINT DEFAULT 1 COMMENT '1: 公共基础课 2:',
     PRIMARY KEY (`subject_id`)
 )ENGINE = InnoDB
  DEFAULT CHARSET = utf8 COMMENT ='教学科目表';
