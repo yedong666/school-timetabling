@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author yyd
- * @since 2023-05-20
+ * @since 2023-06-14
  */
 @Getter
 @Setter
@@ -32,6 +32,18 @@ public class Subject implements Serializable {
     private String subjectName;
 
     private String subjectDesc;
+
+    @ApiModelProperty("对应开设课程最大选课人数")
+    private Integer subjectStuCapacity;
+
+    @ApiModelProperty("1: 公共基础课 2:")
+    private Integer subjectType;
+
+    @ApiModelProperty("这门课需要上多少学时")
+    private Integer subjectLessonNum;
+
+    @ApiModelProperty("这门课每周需要上几节课（多少学时）")
+    private Integer subjectLessonPerWeek;
 
 
 }

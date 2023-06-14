@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author yyd
- * @since 2023-05-24
+ * @since 2023-06-14
  */
 @Getter
 @Setter
@@ -28,6 +28,9 @@ public class Course implements Serializable {
     @ApiModelProperty("课程id")
     @TableId(value = "course_id", type = IdType.AUTO)
     private Integer courseId;
+
+    @ApiModelProperty("课程名")
+    private String courseName;
 
     private Integer subjectId;
 
