@@ -6,20 +6,28 @@ CREATE TABLE student
     student_id INT NOT NULL AUTO_INCREMENT COMMENT '学生id',
     student_name  varchar(20) NOT NULL COMMENT '用户名',
     student_enter_time DATETIME NOT NULL COMMENT '入学时间',
-    student_year_no tinyint GENERATED ALWAYS AS (TIMESTAMPDIFF(MONTH, student_enter_time, now()) / 6 + 1),
+    student_year_no tinyint DEFAULT 1 COMMENT '第几学期',
     student_class INT NOT NULL COMMENT '学生班级', #班级的作用?
     major_id INT NOT NULL COMMENT '专业id',
     PRIMARY KEY (`student_id`)
 )ENGINE = InnoDB
  DEFAULT CHARSET = utf8 COMMENT ='学生表';
 
+drop table if exists manage_system.major;
+CREATE TABLE major(
+                      major_id  INT NOT NULL AUTO_INCREMENT COMMENT '主键',
+                      major_name varchar(20) NOT NULL COMMENT '专业名',
+                      PRIMARY KEY (`major_id`)
+)ENGINE = InnoDB
+ DEFAULT CHARSET = utf8 COMMENT ='培养计划表';
+
 drop table if exists manage_system.training_plan;
 CREATE TABLE training_plan(
-    training_plan_id  INT NOT NULL AUTO_INCREMENT COMMENT '主键',
-    major_id INT  NOT NULL COMMENT '专业id',
-    year_no TINYINT NOT NULL COMMENT '学年(1、2....8)',
-    subject_id INT NOT NULL ,
-    PRIMARY KEY (`training_plan_id`)
+                              training_plan_id  INT NOT NULL AUTO_INCREMENT COMMENT '主键',
+                              major_id INT  NOT NULL COMMENT '专业id',
+                              year_no TINYINT NOT NULL COMMENT '第几学期',
+                              subject_id INT NOT NULL ,
+                              PRIMARY KEY (`training_plan_id`)
 )ENGINE = InnoDB
  DEFAULT CHARSET = utf8 COMMENT ='培养计划表';
 
@@ -31,6 +39,8 @@ CREATE TABLE subject
     subject_desc varchar(200)                NOT NULL,
     subject_stu_capacity INT DEFAULT 50 COMMENT '对应开设课程最大选课人数',
     subject_type TINYINT DEFAULT 1 COMMENT '1: 公共基础课 2:',
+    subject_lesson_num INT DEFAULT 30 COMMENT '这门课需要上多少学时',
+    subject_lesson_per_week INT DEFAULT 3 COMMENT '这门课每周需要上几节课（多少学时）',
     PRIMARY KEY (`subject_id`)
 )ENGINE = InnoDB
  DEFAULT CHARSET = utf8 COMMENT ='教学科目表';
@@ -55,20 +65,11 @@ CREATE TABLE teacher_can_teach_subject
 )ENGINE = InnoDB
  DEFAULT CHARSET = utf8 COMMENT = '教师与教学科目关联表(多对多关系)';
 
-drop table if exists manage_system.student_should_select_subject;
-CREATE TABLE student_should_select_subject
-(
-    student_should_select_subject_id INT NOT NULL AUTO_INCREMENT COMMENT '主键',
-    student_id                       INT             NOT NULL,
-    subject_id                       INT             NOT NULL,
-    PRIMARY KEY (`student_should_select_subject_id`)
-)ENGINE = InnoDB
- DEFAULT CHARSET = utf8 COMMENT = '学生与教学科目关联表(多对多关系)';
-
 drop table if exists manage_system.course;
 CREATE TABLE course
 (
     course_id  INT NOT NULL AUTO_INCREMENT COMMENT '课程id',
+    course_name varchar(50) NOT NULL COMMENT '课程名',
     subject_id INT             NOT NULL,
     PRIMARY KEY (`course_id`)
 )ENGINE = InnoDB
@@ -144,14 +145,3 @@ CREATE TABLE classroom
     PRIMARY KEY (`classroom_id`)
 )ENGINE = InnoDB
  DEFAULT CHARSET = utf8 COMMENT = '教室信息表';
-
-# 关于时间段这个表的设计我的想法是这样的
-drop table if exists manage_system.timeslot;
-CREATE TABLE timeslot
-(
-    timeslot_id INT NOT NULL AUTO_INCREMENT COMMENT '主键',
-    from_time   varchar(50)                NOT NULL,
-    to_time     varchar(50)                NOT NULL,
-    PRIMARY KEY (`timeslot_id`)
-)ENGINE = InnoDB
- DEFAULT CHARSET = utf8 COMMENT = '课时时间表';

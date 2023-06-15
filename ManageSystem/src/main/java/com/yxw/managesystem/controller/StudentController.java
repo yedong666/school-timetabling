@@ -1,7 +1,6 @@
 package com.yxw.managesystem.controller;
 
 
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
@@ -12,9 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
  * </p>
  *
  * @author yyd
- * @since 2023-05-20
+ * @since 2023-06-14
  */
 @RestController
 @RequestMapping("/student")
 public class StudentController {
+
 }
