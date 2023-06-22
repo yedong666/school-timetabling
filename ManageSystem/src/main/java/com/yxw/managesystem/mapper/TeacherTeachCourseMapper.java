@@ -17,4 +17,8 @@ import java.util.List;
 @Mapper
 public interface TeacherTeachCourseMapper extends BaseMapper<TeacherTeachCourse> {
     List<TeacherTeachCourse> selectAll();
+
+    void empty();
+
+    void insertTeacherTeachCourse(Integer teacherId, Integer courseId);
 }

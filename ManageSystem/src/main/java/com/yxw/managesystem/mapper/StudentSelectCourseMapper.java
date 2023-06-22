@@ -17,4 +17,5 @@ import java.util.List;
 @Mapper
 public interface StudentSelectCourseMapper extends BaseMapper<StudentSelectCourse> {
     List<StudentSelectCourse> selectAll();
+    void empty();
 }

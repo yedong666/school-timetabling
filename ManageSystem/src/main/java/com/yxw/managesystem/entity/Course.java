@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author yyd
- * @since 2023-06-14
+ * @since 2023-06-18
  */
 @Getter
 @Setter
@@ -33,6 +33,12 @@ public class Course implements Serializable {
     private String courseName;
 
     private Integer subjectId;
+
+    @ApiModelProperty("从第几周开始上 in")
+    private Integer fromWeek;
+
+    @ApiModelProperty("上到第几周 ex")
+    private Integer toWeek;
 
 
 }

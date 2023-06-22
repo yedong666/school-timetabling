@@ -4,4 +4,7 @@
     <select id="selectAll" resultType="com.yxw.managesystem.entity.Teacher">
         SELECT * FROM teacher
     </select>
+    <update id="empty">
+        TRUNCATE TABLE teacher
+    </update>
 </mapper>

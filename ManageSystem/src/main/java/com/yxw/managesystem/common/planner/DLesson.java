@@ -1,9 +1,12 @@
 package com.yxw.managesystem.common.planner;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.optaplanner.core.api.domain.entity.PlanningEntity;
 import org.optaplanner.core.api.domain.variable.PlanningVariable;
+
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -28,4 +31,17 @@ public class DLesson {
      */
     @PlanningVariable
     private DTimeSlot dTimeSlot;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DLesson dLesson = (DLesson) o;
+        return getId().equals(dLesson.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
+    }
 }

@@ -4,4 +4,12 @@
     <select id="selectAll" resultType="com.yxw.managesystem.entity.TeacherTeachCourse">
         SELECT * FROM teacher_teach_course
     </select>
+    <update id="insertTeacherTeachCourse">
+        INSERT INTO teacher_teach_course (teacher_id, course_id)
+        VALUES (#{teacherId}, #{courseId})
+        ON DUPLICATE KEY UPDATE teacher_teach_course_id = teacher_teach_course_id;
+    </update>
+    <update id="empty">
+        TRUNCATE TABLE teacher_teach_course
+    </update>
 </mapper>

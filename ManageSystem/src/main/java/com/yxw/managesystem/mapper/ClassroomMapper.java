@@ -17,4 +17,5 @@ import java.util.List;
 @Mapper
 public interface ClassroomMapper extends BaseMapper<Classroom> {
     List<Classroom> selectAll();
+    void empty();
 }

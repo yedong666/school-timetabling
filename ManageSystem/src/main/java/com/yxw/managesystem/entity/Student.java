@@ -16,7 +16,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author yyd
- * @since 2023-06-14
+ * @since 2023-06-18
  */
 @Getter
 @Setter
@@ -40,7 +40,7 @@ public class Student implements Serializable {
     private Integer studentYearNo;
 
     @ApiModelProperty("学生班级")
-    private Integer studentClass;
+    private Integer clazzId;
 
     @ApiModelProperty("专业id")
     private Integer majorId;

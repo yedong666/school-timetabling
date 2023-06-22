@@ -12,9 +12,11 @@ import java.util.List;
  * </p>
  *
  * @author yyd
- * @since 2023-06-14
+ * @since 2023-06-18
  */
 @Mapper
 public interface CourseMapper extends BaseMapper<Course> {
     List<Course> selectAll();
+    void empty();
+    void updateFromWeekAndToWeek(Integer courseId, Integer fromWeek, Integer toWeek);
 }
