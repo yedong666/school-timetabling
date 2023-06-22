@@ -4,4 +4,7 @@
     <select id="selectAll" resultType="com.yxw.managesystem.entity.Major">
         SELECT * FROM major
     </select>
+    <update id="empty">
+        TRUNCATE TABLE major
+    </update>
 </mapper>

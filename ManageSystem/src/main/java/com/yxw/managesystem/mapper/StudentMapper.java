@@ -12,9 +12,10 @@ import java.util.List;
  * </p>
  *
  * @author yyd
- * @since 2023-06-14
+ * @since 2023-06-18
  */
 @Mapper
 public interface StudentMapper extends BaseMapper<Student> {
     List<Student> selectAll();
+    void empty();
 }

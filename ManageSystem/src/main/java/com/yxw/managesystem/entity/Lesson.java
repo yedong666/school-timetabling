@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author yyd
- * @since 2023-06-14
+ * @since 2023-06-18
  */
 @Getter
 @Setter
@@ -31,14 +31,9 @@ public class Lesson implements Serializable {
 
     private Integer courseId;
 
-    private Integer teacherId;
-
     private Integer timeslotId;
 
     private Integer classroomId;
-
-    @ApiModelProperty("是否已安排完毕(需要吗？)")
-    private Integer isSet;
 
 
 }

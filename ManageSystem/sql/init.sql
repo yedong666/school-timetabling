@@ -7,11 +7,20 @@ CREATE TABLE student
     student_name  varchar(20) NOT NULL COMMENT '用户名',
     student_enter_time DATETIME NOT NULL COMMENT '入学时间',
     student_year_no tinyint DEFAULT 1 COMMENT '第几学期',
-    student_class INT NOT NULL COMMENT '学生班级', #班级的作用?
+    clazz_id INT COMMENT '学生班级',
     major_id INT NOT NULL COMMENT '专业id',
     PRIMARY KEY (`student_id`)
 )ENGINE = InnoDB
  DEFAULT CHARSET = utf8 COMMENT ='学生表';
+
+drop table if exists manage_system.clazz;
+CREATE TABLE clazz
+(
+    clazz_id INT NOT NULL AUTO_INCREMENT COMMENT '教学班id',
+    clazz_name varchar(40) NOT NULL COMMENT '教学班名',
+    PRIMARY KEY (`clazz_id`)
+)ENGINE = InnoDB
+DEFAULT CHAR SET = utf8 COMMENT = '教学班表';
 
 drop table if exists manage_system.major;
 CREATE TABLE major(
@@ -70,10 +79,22 @@ CREATE TABLE course
 (
     course_id  INT NOT NULL AUTO_INCREMENT COMMENT '课程id',
     course_name varchar(50) NOT NULL COMMENT '课程名',
-    subject_id INT             NOT NULL,
+    subject_id INT NOT NULL,
+    from_week INT COMMENT '从第几周开始上 in',
+    to_week INT COMMENT '上到第几周 ex',
     PRIMARY KEY (`course_id`)
 )ENGINE = InnoDB
  DEFAULT CHARSET = utf8 COMMENT = '课程表(与教学科目表为一对多关系)';
+
+drop table if exists manage_system.course_for_class;
+CREATE TABLE course_for_clazz
+(
+    course_for_class_id INT NOT NULL AUTO_INCREMENT COMMENT '课程为教学班开设, 一条记录的 id',
+    course_id INT NOT NULL COMMENT '课程id',
+    clazz_id INT NOT NULL COMMENT '教学班id',
+    PRIMARY KEY (`course_for_class_id`)
+)ENGINE = InnoDB
+ DEFAULT CHARSET = utf8 COMMENT = '课程与教学班关联表, 记录一门课主要为哪些教学班开设';
 
 drop table if exists manage_system.teacher_teach_course;
 CREATE TABLE teacher_teach_course
@@ -102,10 +123,8 @@ CREATE TABLE lesson
 (
     lesson_id    INT NOT NULL AUTO_INCREMENT COMMENT '课时id',
     course_id    INT             NOT NULL,
-    teacher_id   INT DEFAULT 0,
-    timeslot_id  INT DEFAULT 0,
-    classroom_id INT DEFAULT 0,
-    is_set tinyint(2) DEFAULT 0 COMMENT '是否已安排完毕(需要吗？)',
+    timeslot_id  INT,
+    classroom_id INT,
     PRIMARY KEY (`lesson_id`)
 )ENGINE = InnoDB
  DEFAULT CHARSET = utf8 COMMENT = '课程的课时安排表';

@@ -1,7 +1,7 @@
 package com.yxw.managesystem;
 
 import com.yxw.managesystem.common.planner.DCourse;
-import com.yxw.managesystem.common.planner.DWeek;
+import com.yxw.managesystem.common.planner.DLesson;
 import com.yxw.managesystem.common.planner.Solution;
 import com.yxw.managesystem.entity.*;
 import com.yxw.managesystem.mapper.*;
@@ -40,12 +40,25 @@ class ManageSystemApplicationTests {
     @Autowired
     private ClassroomMapper classroomMapper;
 
+    @Autowired
+    private ClazzMapper clazzMapper;
+
+    @Autowired
+    private CourseForClazzMapper courseForClazzMapper;
+
+    @Autowired
+    private LessonMapper lessonMapper;
+
+    @Autowired
+    private TeacherTeachCourseMapper teacherTeachCourseMapper;
+
     @Test
-    void generateStudents() {
+    void generateStudentsAndClazz() {
         // 生成学生数据
         int[] majorSizeArr = new int[]{ 150, 100, 50 };
         int classSize = 50; // 一个班的人数
-        int cnt = 1;
+        int stuCnt = 1;
+        int clazzCnt = 1;
         for (int i = 1; i <= majorSizeArr.length; i ++) {
             int majorSize = majorSizeArr[i - 1];
             int classNum = majorSize % classSize == 0
@@ -54,14 +67,19 @@ class ManageSystemApplicationTests {
             for (int j = 1; j <= classNum; j ++) {
                 for (int k = 0; k < classSize; k ++) {
                     Student student = new Student();
-                    student.setStudentId(cnt);
-                    student.setStudentName("学生" + cnt ++);
-                    student.setStudentClass(j);
+                    student.setStudentId(stuCnt);
+                    student.setStudentName("学生" + stuCnt ++);
+                    student.setClazzId(clazzCnt);
                     student.setMajorId(i);
                     student.setStudentEnterTime(LocalDateTime.of(2023, Month.SEPTEMBER, 3, 0, 0));
                     student.setStudentYearNo(1);
                     studentMapper.insert(student);
                 }
+                Clazz clazz = new Clazz();
+                clazz.setClazzId(clazzCnt);
+                clazz.setClazzName("教学班(专业=" + i + "," + j + ")");
+                clazzMapper.insert(clazz);
+                clazzCnt ++;
             }
         }
     }
@@ -149,38 +167,91 @@ class ManageSystemApplicationTests {
 
     @Test
     void testCountStudentsBySubjectId() {
-        int cnt = subjectMapper.countStudentsBySubjectId(1);
+        int cnt = subjectMapper.countStudentHaveSubject(1);
         System.out.println(cnt);
     }
 
     @Test
     void testCalcCourses() {
         List<Subject> subjects = subjectMapper.selectAll();
-        int cnt = 1;
+        int courseForClazzId = 1;
+        int courseId = 0;
         for (Subject subject : subjects) {
-            int countStudents = subjectMapper.countStudentsBySubjectId(subject.getSubjectId());
-            // 应该为这门教学科目开几门课
-            int countCourses = countStudents % subject.getSubjectStuCapacity() == 0
-                    ? countStudents / subject.getSubjectStuCapacity()
-                    : countStudents / subject.getSubjectStuCapacity() + 1;
-            for (int i = 1; i <= countCourses; i ++) {
-                Course course = new Course();
-                course.setCourseId(cnt ++);
-                course.setCourseName(subject.getSubjectName() + i);
-                course.setSubjectId(subject.getSubjectId());
-//                System.out.println(course.getCourseName());
-                courseMapper.insert(course);
+            // 计算应该为这门教学科目开几门课
+            // 满足以下约束
+            // 1. 一个教学班的所有学生在都选同一 course
+            // 2. 选一个 course 的学生数 <= subjectCapacity
+            int subjectStuCapacity = subject.getSubjectStuCapacity();
+            // 选了这门课的教学班
+            List<Integer> clazzIdList =
+                    subjectMapper.selectAllClazzHaveSubject(subject.getSubjectId());
+            int curRestCapacity = 0; // 当前课程还能容纳多少学生
+            int clazzSize = 50;
+            for (Integer clazzId : clazzIdList) {
+                // 当前课程剩余容量无法容纳这个教学班了, 开一个新 course
+                if (curRestCapacity < clazzSize) {
+                    courseId ++;
+                    Course course = new Course();
+                    course.setSubjectId(subject.getSubjectId());
+                    course.setCourseId(courseId);
+                    course.setCourseName(subject.getSubjectName() + courseId);
+                    courseMapper.insert(course);
+                    curRestCapacity = subjectStuCapacity;
+                }
+                curRestCapacity -= clazzSize;
+                // 记录这个 course 的目标班级有 clazz
+                CourseForClazz courseForClazz = new CourseForClazz();
+                courseForClazz.setCourseForClassId(++ courseForClazzId);
+                courseForClazz.setCourseId(courseId);
+                courseForClazz.setClazzId(clazzId);
+                courseForClazzMapper.insert(courseForClazz);
             }
         }
     }
 
     @Test
     void testArrange() {
+        // clear
+        courseMapper.empty();
+        lessonMapper.empty();
+        teacherTeachCourseMapper.empty();
+        // arrange
         List<Course> courseList = courseMapper.selectAll();
+        List<Clazz> clazzList = clazzMapper.selectAll();
         List<Classroom> classroomList = classroomMapper.selectAll();
         List<Subject> subjectList = subjectMapper.selectAll();
-        Solution problem = Solution.initProblem(courseList, classroomList, subjectList);
-        Solution result = Solution.solve(problem);
-        System.out.println(result);
+        List<Teacher> teacherList = teacherMapper.selectAll();
+        List<TeacherCanTeachSubject> teacherCanTeachSubjectList = teacherCanTeachSubjectMapper.selectAll();
+        List<CourseForClazz> courseForClazzList = courseForClazzMapper.selectAll();
+        Solution problem = Solution.initProblem(
+                courseList,
+                clazzList,
+                classroomList,
+                subjectList,
+                teacherList,
+                teacherCanTeachSubjectList,
+                courseForClazzList
+        );
+        Solution result = problem.solve(60);
+        result.persistResult(
+                courseMapper,
+                teacherTeachCourseMapper,
+                lessonMapper
+        );
+        for (DCourse dCourse : result.getDCourseList()) {
+            System.out.printf(
+                    "course %d, teacher %d, start from %d-th week\n",
+                    dCourse.getId(),
+                    dCourse.getDTeacher().getId(),
+                    dCourse.getDWeek().getIndex()
+            );
+            for (DLesson dLesson : dCourse.getLessons()) {
+                System.out.printf(
+                        "\ttimeslot %d, classroom %d\n",
+                        dLesson.getDTimeSlot().getIndex(),
+                        dLesson.getDClassroom().getId()
+                );
+            }
+        }
     }
 }

@@ -17,4 +17,5 @@ import java.util.List;
 @Mapper
 public interface MajorMapper extends BaseMapper<Major> {
     List<Major> selectAll();
+    void empty();
 }

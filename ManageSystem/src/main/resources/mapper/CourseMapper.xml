@@ -4,4 +4,12 @@
     <select id="selectAll" resultType="com.yxw.managesystem.entity.Course">
         SELECT * FROM course
     </select>
+    <update id="updateFromWeekAndToWeek">
+        UPDATE course
+        SET from_week = #{fromWeek}, to_week = #{toWeek}
+        WHERE course_id = #{courseId}
+    </update>
+    <update id="empty">
+        TRUNCATE TABLE course
+    </update>
 </mapper>
