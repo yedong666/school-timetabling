@@ -26,11 +26,17 @@ public class User implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty("用户id(自增主键)")
-    private Long id;
+    private Integer id;
 
     @ApiModelProperty("用户名")
     private String username;
 
     @ApiModelProperty("密码")
     private String password;
+
+    @ApiModelProperty("用户角色")
+    private String role;
+
+    @ApiModelProperty("用户角色对应ID(管理员此字段为0)")
+    private Integer roleId;
 }
