@@ -28,7 +28,7 @@ CREATE TABLE major(
                       major_name varchar(20) NOT NULL COMMENT '专业名',
                       PRIMARY KEY (`major_id`)
 )ENGINE = InnoDB
- DEFAULT CHARSET = utf8 COMMENT ='培养计划表';
+ DEFAULT CHARSET = utf8 COMMENT ='专业表   ';
 
 drop table if exists manage_system.training_plan;
 CREATE TABLE training_plan(
