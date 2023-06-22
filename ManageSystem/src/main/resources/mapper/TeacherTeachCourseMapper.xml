@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yxw.managesystem.mapper.TeacherTeachCourseMapper">
+    <select id="selectAll" resultType="com.yxw.managesystem.entity.TeacherTeachCourse">
+        SELECT * FROM teacher_teach_course
+        WHERE problem_id = #{problemId}
+    </select>
+    <update id="insertTeacherTeachCourse">
+        INSERT INTO teacher_teach_course (teacher_id, course_id)
+        VALUES (#{teacherId}, #{courseId})
+        ON DUPLICATE KEY UPDATE teacher_teach_course_id = teacher_teach_course_id;
+    </update>
+    <update id="empty">
+        TRUNCATE TABLE teacher_teach_course
+    </update>
+</mapper>

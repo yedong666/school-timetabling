@@ -35,5 +35,5 @@ public class StudentShouldSelectSubject implements Serializable {
 
     private Integer subjectId;
 
-
+    private String problemId;
 }

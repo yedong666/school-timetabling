@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yxw.managesystem.mapper.CourseMapper">
+    <select id="selectAll" resultType="com.yxw.managesystem.entity.Course">
+        SELECT * FROM course
+        WHERE problem_id = #{problemId}
+    </select>
+    <update id="updateFromWeekAndToWeek">
+        UPDATE course
+        SET from_week = #{fromWeek}, to_week = #{toWeek}
+        WHERE course_id = #{courseId} AND problem_id = #{problemId}
+    </update>
+    <update id="empty">
+        TRUNCATE TABLE course
+    </update>
+</mapper>

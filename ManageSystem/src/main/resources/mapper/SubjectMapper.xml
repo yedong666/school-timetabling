@@ -1,5 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yxw.managesystem.mapper.SubjectMapper">
-
+    <select id="selectAll" resultType="com.yxw.managesystem.entity.Subject">
+        SELECT * FROM subject
+        WHERE problem_id = #{problemId}
+    </select>
+    <select id="countStudentHaveSubject" resultType="java.lang.Integer">
+        SELECT COUNT(student_id)
+        FROM student s, training_plan tp
+        WHERE problem_id = #{problemId}
+          AND s.major_id = tp.major_id
+          AND s.student_year_no = tp.year_no
+          AND tp.subject_id = #{subjectId};
+    </select>
+    <select id="selectAllClazzHaveSubject" resultType="java.lang.Integer">
+        SELECT DISTINCT clazz_id
+        FROM student s, training_plan tp
+        WHERE problem_id = #{problemId}
+          AND s.major_id = tp.major_id
+          AND s.student_year_no = tp.year_no
+          AND tp.subject_id = #{subjectId};
+    </select>
+    <update id="empty">
+        TRUNCATE TABLE subject
+    </update>
 </mapper>

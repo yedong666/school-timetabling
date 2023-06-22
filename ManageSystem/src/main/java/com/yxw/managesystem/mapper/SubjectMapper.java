@@ -1,8 +1,11 @@
 package com.yxw.managesystem.mapper;
 
+import com.yxw.managesystem.entity.Clazz;
 import com.yxw.managesystem.entity.Subject;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 /**
  * <p>
@@ -10,9 +13,20 @@ import org.apache.ibatis.annotations.Mapper;
  * </p>
  *
  * @author yyd
- * @since 2023-05-20
+ * @since 2023-06-14
  */
 @Mapper
 public interface SubjectMapper extends BaseMapper<Subject> {
 
+    /**
+     * 计算总共有多少学生有某门课
+     */
+    Integer countStudentHaveSubject(String problemId, Integer subjectId);
+
+    /**
+     * 获得所有有某门课的教学班
+     */
+    List<Integer> selectAllClazzHaveSubject(String problemId, Integer subjectId);
+
+    List<Subject> selectAll(String problemId);
 }
