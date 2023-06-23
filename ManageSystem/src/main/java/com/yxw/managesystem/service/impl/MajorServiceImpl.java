@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -30,8 +31,20 @@ public class MajorServiceImpl extends ServiceImpl<MajorMapper, Major> implements
                 majorMapper.insert(major);
             }
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
         return true;
+    }
+
+    @Nullable
+    @Override
+    public List<Major> getAllMajors(String problemId) {
+        try {
+            return majorMapper.selectAll(problemId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

@@ -4,6 +4,7 @@ import com.yxw.managesystem.entity.Major;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yxw.managesystem.mapper.MajorMapper;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -17,4 +18,7 @@ import java.util.List;
 public interface IMajorService extends IService<Major> {
 
     boolean addMajors(List<Major> majorList);
+
+    @Nullable
+    List<Major> getAllMajors(String problemId);
 }

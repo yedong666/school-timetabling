@@ -11,6 +11,7 @@ import org.optaplanner.core.api.solver.SolverManager;
 import org.optaplanner.core.api.solver.SolverStatus;
 import org.optaplanner.core.config.solver.SolverConfig;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Nullable;
 import java.time.Duration;
@@ -21,6 +22,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListSet;
 
+@Service
 public class SolveJobService implements ISolveJobService {
 
     private static SolverManager<Solution, String> __SOLVE_MANAGER;

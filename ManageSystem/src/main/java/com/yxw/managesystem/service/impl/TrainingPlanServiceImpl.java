@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -34,5 +35,16 @@ public class TrainingPlanServiceImpl extends ServiceImpl<TrainingPlanMapper, Tra
             return false;
         }
         return true;
+    }
+
+    @Nullable
+    @Override
+    public List<TrainingPlan> getAllTrainingPlans(String problemId) {
+        try {
+            return trainingPlanMapper.selectAll(problemId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

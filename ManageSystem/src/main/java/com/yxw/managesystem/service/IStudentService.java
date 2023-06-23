@@ -3,6 +3,7 @@ package com.yxw.managesystem.service;
 import com.yxw.managesystem.entity.Student;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -16,4 +17,7 @@ import java.util.List;
 public interface IStudentService extends IService<Student> {
 
     public boolean addStudents(List<Student> studentList);
+
+    @Nullable
+    public List<Student> getAllStudents(String problemId);
 }

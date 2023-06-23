@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -31,8 +32,20 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
                 studentMapper.insert(student);
             }
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
         return true;
+    }
+
+    @Override
+    @Nullable
+    public List<Student> getAllStudents(String problemId) {
+        try {
+            return studentMapper.selectAll(problemId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

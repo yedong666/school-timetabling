@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @ApiModel("Result")
-public class Result<T> {
+public class Result {
     /**
      * 1.status状态值：代表本次请求response的状态结果。
      */
@@ -28,7 +28,7 @@ public class Result<T> {
      * 3.data数据：本次返回的数据。
      */
     @ApiModelProperty("数据")
-    private T data;
+    private Object data;
 
     /**
      * 成功，创建ResResult：没data数据
