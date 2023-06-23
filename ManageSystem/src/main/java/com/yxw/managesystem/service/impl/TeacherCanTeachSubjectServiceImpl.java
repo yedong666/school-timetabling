@@ -4,7 +4,10 @@ import com.yxw.managesystem.entity.TeacherCanTeachSubject;
 import com.yxw.managesystem.mapper.TeacherCanTeachSubjectMapper;
 import com.yxw.managesystem.service.ITeacherCanTeachSubjectService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <p>
@@ -17,4 +20,18 @@ import org.springframework.stereotype.Service;
 @Service
 public class TeacherCanTeachSubjectServiceImpl extends ServiceImpl<TeacherCanTeachSubjectMapper, TeacherCanTeachSubject> implements ITeacherCanTeachSubjectService {
 
+    @Autowired
+    private TeacherCanTeachSubjectMapper teacherCanTeachSubjectMapper;
+
+    @Override
+    public boolean addTeacherCanTeachSubjectList(List<TeacherCanTeachSubject> teacherCanTeachSubjectList) {
+        try {
+            for (TeacherCanTeachSubject teacherCanTeachSubject : teacherCanTeachSubjectList) {
+                teacherCanTeachSubjectMapper.insert(teacherCanTeachSubject);
+            }
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
 }

@@ -4,6 +4,7 @@ import com.yxw.managesystem.entity.Student;
 import com.yxw.managesystem.mapper.StudentMapper;
 import com.yxw.managesystem.service.IStudentService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,8 +19,20 @@ import java.util.List;
  */
 @Service
 public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> implements IStudentService {
+
+    @Autowired
+    private StudentMapper studentMapper;
+
+    // TODO XML 里用 foreach 批量插入
     @Override
     public boolean addStudents(List<Student> studentList) {
-        throw new UnsupportedOperationException();
+        try {
+            for (Student student : studentList) {
+                studentMapper.insert(student);
+            }
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
     }
 }

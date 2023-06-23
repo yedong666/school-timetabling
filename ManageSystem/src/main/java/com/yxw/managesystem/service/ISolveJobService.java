@@ -20,4 +20,9 @@ public interface ISolveJobService {
      * 查询一个求解任务的状态
      */
     Solution.Status querySolveJobStatus(String problemId);
+
+    /**
+     * 停止一个求解任务
+     */
+    void stopSolving(String problemId);
 }

@@ -4,7 +4,10 @@ import com.yxw.managesystem.entity.Major;
 import com.yxw.managesystem.mapper.MajorMapper;
 import com.yxw.managesystem.service.IMajorService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <p>
@@ -17,4 +20,18 @@ import org.springframework.stereotype.Service;
 @Service
 public class MajorServiceImpl extends ServiceImpl<MajorMapper, Major> implements IMajorService {
 
+    @Autowired
+    private MajorMapper majorMapper;
+
+    @Override
+    public boolean addMajors(List<Major> majorList) {
+        try {
+            for (Major major : majorList) {
+                majorMapper.insert(major);
+            }
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
 }

@@ -1,16 +1,12 @@
 package com.yxw.managesystem.service.impl;
 
-import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.yxw.managesystem.common.Result;
 import com.yxw.managesystem.common.util.JwtUtil;
 import com.yxw.managesystem.common.util.PasswordSecureUtil;
-import com.yxw.managesystem.common.util.ThrowExceptionUtil;
 import com.yxw.managesystem.entity.User;
-import com.yxw.managesystem.enums.ExceptionTypeEnum;
 import com.yxw.managesystem.mapper.UserMapper;
-import com.yxw.managesystem.service.UserService;
+import com.yxw.managesystem.service.IUserService;
 import com.yxw.managesystem.vo.LoginVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -20,7 +16,7 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements IUserService {
     @Autowired
     private UserMapper userMapper;
     @Autowired

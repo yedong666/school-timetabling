@@ -62,7 +62,6 @@ public class Solution {
         SCHEDULED,
         ON_GOING,
         FAILED,
-        IMPOSSIBLE,
     }
 
     public static Solution initProblem(

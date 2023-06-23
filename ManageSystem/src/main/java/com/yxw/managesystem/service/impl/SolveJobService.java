@@ -12,6 +12,7 @@ import org.optaplanner.core.api.solver.SolverStatus;
 import org.optaplanner.core.config.solver.SolverConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.annotation.Nullable;
 import java.time.Duration;
 import java.util.List;
 import java.util.Map;
@@ -75,23 +76,30 @@ public class SolveJobService implements ISolveJobService {
     }
 
     @Override
+    @Nullable
     public Solution generateProblem(String problemId) {
-        List<Course> courseList = courseMapper.selectAll(problemId);
-        List<Clazz> clazzList = clazzMapper.selectAll(problemId);
-        List<Classroom> classroomList = classroomMapper.selectAll(problemId);
-        List<Subject> subjectList = subjectMapper.selectAll(problemId);
-        List<Teacher> teacherList = teacherMapper.selectAll(problemId);
-        List<TeacherCanTeachSubject> teacherCanTeachSubjectList = teacherCanTeachSubjectMapper.selectAll(problemId);
-        List<CourseForClazz> courseForClazzList = courseForClazzMapper.selectAll(problemId);
-        return Solution.initProblem(
-                courseList,
-                clazzList,
-                classroomList,
-                subjectList,
-                teacherList,
-                teacherCanTeachSubjectList,
-                courseForClazzList
-        );
+        Solution ret;
+        try {
+            List<Course> courseList = courseMapper.selectAll(problemId);
+            List<Clazz> clazzList = clazzMapper.selectAll(problemId);
+            List<Classroom> classroomList = classroomMapper.selectAll(problemId);
+            List<Subject> subjectList = subjectMapper.selectAll(problemId);
+            List<Teacher> teacherList = teacherMapper.selectAll(problemId);
+            List<TeacherCanTeachSubject> teacherCanTeachSubjectList = teacherCanTeachSubjectMapper.selectAll(problemId);
+            List<CourseForClazz> courseForClazzList = courseForClazzMapper.selectAll(problemId);
+            ret = Solution.initProblem(
+                    courseList,
+                    clazzList,
+                    classroomList,
+                    subjectList,
+                    teacherList,
+                    teacherCanTeachSubjectList,
+                    courseForClazzList
+            );
+        } catch (Exception e) {
+            ret = null;
+        }
+        return ret;
     }
 
     @Override
@@ -110,6 +118,7 @@ public class SolveJobService implements ISolveJobService {
     }
 
     @Override
+    @Nullable
     public Solution.Status querySolveJobStatus(String problemId) {
         if (getFailedProblems().contains(problemId)) {
             return Solution.Status.FAILED;
@@ -122,6 +131,12 @@ public class SolveJobService implements ISolveJobService {
             return Solution.Status.ON_GOING;
         } else if (solverStatus == SolverStatus.SOLVING_SCHEDULED) {
             return Solution.Status.SCHEDULED;
-        } else return Solution.Status.IMPOSSIBLE;
+        }
+        return null;
+    }
+
+    @Override
+    public void stopSolving(String problemId) {
+        getSolverManager().terminateEarly(problemId);
     }
 }

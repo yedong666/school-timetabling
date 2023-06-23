@@ -1,10 +1,15 @@
 package com.yxw.managesystem.service.impl;
 
+import com.yxw.managesystem.entity.Classroom;
 import com.yxw.managesystem.entity.CourseForClazz;
+import com.yxw.managesystem.mapper.ClassroomMapper;
 import com.yxw.managesystem.mapper.CourseForClazzMapper;
 import com.yxw.managesystem.service.ICourseForClazzService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <p>
@@ -17,4 +22,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class CourseForClazzServiceImpl extends ServiceImpl<CourseForClazzMapper, CourseForClazz> implements ICourseForClazzService {
 
+    @Autowired
+    private CourseForClazzMapper courseForClazzMapper;
 }

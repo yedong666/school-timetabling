@@ -5,8 +5,9 @@ public class MbgTask {
         MbgUtil.mbg(
 //                "classroom",
 //                "course"
-                "lesson"
+//                "lesson"
 //                "major",
+                "problem"
 //                "student",
 //                "student_select_course",
 //                "subject",

@@ -2,6 +2,9 @@ package com.yxw.managesystem.service;
 
 import com.yxw.managesystem.entity.Major;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.yxw.managesystem.mapper.MajorMapper;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IMajorService extends IService<Major> {
 
+    boolean addMajors(List<Major> majorList);
 }

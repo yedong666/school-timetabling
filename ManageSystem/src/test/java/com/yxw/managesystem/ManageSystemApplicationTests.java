@@ -56,6 +56,17 @@ class ManageSystemApplicationTests {
     private static final String problemId = "c90db1a9-6c02-48b3-9738-af33dac56f29";
 
     @Test
+    void emptyAllTables() {
+        classroomMapper.empty();
+        clazzMapper.empty();
+        courseMapper.empty();
+        courseForClazzMapper.empty();
+        lessonMapper.empty();
+        majorMapper.empty();
+
+    }
+
+    @Test
     void generateStudentsAndClazz() {
         // 生成学生数据
         int[] majorSizeArr = new int[]{ 150, 100, 50 };

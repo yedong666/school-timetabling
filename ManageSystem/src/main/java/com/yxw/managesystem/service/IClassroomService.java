@@ -3,6 +3,8 @@ package com.yxw.managesystem.service;
 import com.yxw.managesystem.entity.Classroom;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
  * <p>
  * 教室信息表 服务类
@@ -13,4 +15,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IClassroomService extends IService<Classroom> {
 
+    boolean addClassrooms(List<Classroom> classroomList);
 }
