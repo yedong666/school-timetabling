@@ -40,11 +40,13 @@ public class UserController {
     }
 
     @ApiOperation("根据账号获取用户信息")
-    @RoleLevel("ADMIN")
+    @RoleLevel("ADMIN, STUDENT, TEACHER")
     @RequestMapping(value = "getUser", method = RequestMethod.GET)
     public Result getUser(@Param("username") String username){
         System.out.println("登录接口访问成功");
         return userService.getUser(username);
     }
+
+
 
 }

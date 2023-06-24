@@ -20,6 +20,9 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 用户访问接口前检验用户是否有对应的访问权限
@@ -47,11 +50,12 @@ public class CheckRoleAspect {
         Method method = methodSignature.getMethod();
         // 获取注解Action
         RoleLevel annotation = method.getAnnotation(RoleLevel.class);
-        String role = annotation.value();
+        String roles = annotation.value();
+        List<String> roleList = Arrays.stream(roles.split(",")).collect(Collectors.toList());
         LoginVo loginVo = (LoginVo) redisTemplate.opsForValue().get(token);
 
         assert loginVo != null;
-        if(!loginVo.getRole().equals(role)){
+        if(roleList.contains(loginVo.getRole())){
             System.out.println("权限不足");
             ThrowExceptionUtil.throwException(ExceptionTypeEnum.ROLE_LEVEL_TOO_LOW);
         }
