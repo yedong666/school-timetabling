@@ -29,7 +29,7 @@
 </template>
 
 <script>
-
+import {login} from '@/api/user.js'
 export default {
   name: 'Login',
   data() {
@@ -37,7 +37,6 @@ export default {
       user: {
         account: '',
         password: '',
-        code: '',
       },
       rules: {
         account: [
@@ -60,8 +59,6 @@ export default {
   },
   methods: {
     login(formName) {
-      // let that = this
-      // let userData = this.user
       let validateFlag = false
       this.$refs[formName].validate((valid) => {
         if (valid) {
@@ -70,12 +67,20 @@ export default {
       })
       if(validateFlag){
         //表单校验成功
-        this.$router.push({
-          path: '/manage',
-        })
         //发送登录请求
-
-        //跳转到主页
+        login(this.user.account, this.user.password).then(resp => {
+            let loginVo = resp.data.data;
+            if(loginVo != null){
+              console.log(loginVo)
+              //将登录后返回的用户信息存入localStorage
+              alert(loginVo.token)
+              localStorage.user = JSON.stringify(loginVo)
+              //跳转到主页
+              this.$router.push({
+                path: '/manage',
+              })
+            }
+        })
       }
       return false;
 

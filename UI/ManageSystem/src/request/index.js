@@ -2,13 +2,22 @@ import axios from 'axios'
 import {Message} from 'element-ui'
 
 const service = axios.create({
-  baseURL: "http://localhost:8081",
+  baseURL: "http://localhost:8888",
   timeout: 10000
 })
 
 //request拦截器
 service.interceptors.request.use(function (config) {
     // 在发送请求之前做些什么
+    let user = JSON.parse(localStorage.user)
+    let token = user.token
+    if(token != null){
+        alert(token)
+        config.headers = {
+            'Content-Type': 'application/json',
+            'Authorization':token
+        }
+    }
     Message({
         type: 'success',
         showClose: true,
