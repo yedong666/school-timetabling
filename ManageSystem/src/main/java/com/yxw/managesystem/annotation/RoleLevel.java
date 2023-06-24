@@ -10,5 +10,5 @@ public @interface RoleLevel {
     /**
      * @return 访问权限(定义某接口需要什么权限才可访问)
      */
-    String value() default "admin";
+    String value() default "ADMIN";
 }
