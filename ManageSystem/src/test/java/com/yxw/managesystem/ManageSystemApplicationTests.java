@@ -86,7 +86,6 @@ class ManageSystemApplicationTests {
                     student.setStudentName("学生" + stuCnt ++);
                     student.setClazzId(clazzCnt);
                     student.setMajorId(i);
-                    student.setStudentEnterTime(LocalDateTime.of(2023, Month.SEPTEMBER, 3, 0, 0));
                     student.setStudentYearNo(1);
                     studentMapper.insert(student);
                 }

@@ -16,8 +16,8 @@ import java.util.List;
  */
 public interface IStudentService extends IService<Student> {
 
-    public boolean addStudents(List<Student> studentList);
+    boolean addStudents(List<Student> studentList);
 
     @Nullable
-    public List<Student> getAllStudents(String problemId);
+    List<Student> getAllStudents(String problemId);
 }

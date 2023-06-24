@@ -16,7 +16,7 @@ CREATE TABLE student
 (
     student_id INT NOT NULL AUTO_INCREMENT COMMENT '学生id',
     student_name  varchar(20) NOT NULL COMMENT '用户名',
-    student_enter_time DATETIME NOT NULL COMMENT '入学时间',
+--    student_enter_time DATETIME NOT NULL COMMENT '入学时间',
     student_year_no tinyint DEFAULT 1 COMMENT '第几学期',
     clazz_id INT COMMENT '学生班级',
     major_id INT NOT NULL COMMENT '专业id',

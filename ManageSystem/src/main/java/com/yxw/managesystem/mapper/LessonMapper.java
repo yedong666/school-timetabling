@@ -18,4 +18,5 @@ import java.util.List;
 public interface LessonMapper extends BaseMapper<Lesson> {
     List<Lesson> selectAll(String problemId);
     void empty();
+    List<Lesson> getLessonsByStudentId(String problemId, Integer studentId);
 }

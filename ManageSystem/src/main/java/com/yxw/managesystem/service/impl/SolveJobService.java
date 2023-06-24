@@ -16,20 +16,17 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Nullable;
 import java.time.Duration;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListSet;
 
 @Service
 public class SolveJobService implements ISolveJobService {
 
     private static SolverManager<Solution, String> __SOLVE_MANAGER;
-    private static Map<String, Solution> __SOLUTION_MANAGER;
+    private static Set<String> __FINISHED_PROBLEMS;
     private static Set<String> __FAILED_PROBLEMS;
 
-    private static final long WAIT_SECS = 60;
+    private static long WAIT_SECS = 60;
 
     @Autowired
     private CourseMapper courseMapper;
@@ -52,6 +49,12 @@ public class SolveJobService implements ISolveJobService {
     @Autowired
     private CourseForClazzMapper courseForClazzMapper;
 
+    @Autowired
+    private TeacherTeachCourseMapper teacherTeachCourseMapper;
+
+    @Autowired
+    private LessonMapper lessonMapper;
+
     private SolverManager<Solution, String> getSolverManager() {
         if (__SOLVE_MANAGER == null) {
             __SOLVE_MANAGER = SolverManager.create(new SolverConfig()
@@ -63,11 +66,11 @@ public class SolveJobService implements ISolveJobService {
         return __SOLVE_MANAGER;
     }
 
-    private Map<String, Solution> getSolutionMap() {
-        if (__SOLUTION_MANAGER == null) {
-            __SOLUTION_MANAGER = new ConcurrentHashMap<>();
+    private Set<String> getFinishedProblems() {
+        if (__FINISHED_PROBLEMS == null) {
+            __FINISHED_PROBLEMS = new ConcurrentSkipListSet<>();
         }
-        return __SOLUTION_MANAGER;
+        return __FINISHED_PROBLEMS;
     }
 
     private Set<String> getFailedProblems() {
@@ -110,11 +113,18 @@ public class SolveJobService implements ISolveJobService {
                 problemId,
                 problem,
                 solution -> {
-                    // 计算完成后将最佳结果放到 solutionMap 中
-                    getSolutionMap().put(problemId, solution);
+                    // 将结果持久化到数据库
+                    solution.persistResult(
+                            problemId,
+                            courseMapper,
+                            teacherTeachCourseMapper,
+                            lessonMapper
+                    );
+                    // 标记此问题已经解决
+                    getFinishedProblems().add(problemId);
                 },
                 (failedProblemId, exception) -> {
-                    // 计算出错, 则将 problemId 加入 failedProblems
+                    // 计算出错, 标记此问题为出错
                     getFailedProblems().add(failedProblemId);
                 });
     }
@@ -125,7 +135,7 @@ public class SolveJobService implements ISolveJobService {
         if (getFailedProblems().contains(problemId)) {
             return Solution.Status.FAILED;
         }
-        if (getSolutionMap().containsKey(problemId)) {
+        if (getFinishedProblems().contains(problemId)) {
             return Solution.Status.FINISHED;
         }
         SolverStatus solverStatus = getSolverManager().getSolverStatus(problemId);
@@ -140,5 +150,10 @@ public class SolveJobService implements ISolveJobService {
     @Override
     public void stopSolving(String problemId) {
         getSolverManager().terminateEarly(problemId);
+    }
+
+    @Override
+    public void setWaitSecs(int waitSecs) {
+        SolveJobService.WAIT_SECS = waitSecs;
     }
 }

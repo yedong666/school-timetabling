@@ -8,7 +8,8 @@
     <select id="countStudentHaveSubject" resultType="java.lang.Integer">
         SELECT COUNT(student_id)
         FROM student s, training_plan tp
-        WHERE problem_id = #{problemId}
+        WHERE s.problem_id = #{problemId}
+          AND tp.problem_id = #{problemId}
           AND s.major_id = tp.major_id
           AND s.student_year_no = tp.year_no
           AND tp.subject_id = #{subjectId};
@@ -16,7 +17,8 @@
     <select id="selectAllClazzHaveSubject" resultType="java.lang.Integer">
         SELECT DISTINCT clazz_id
         FROM student s, training_plan tp
-        WHERE problem_id = #{problemId}
+        WHERE s.problem_id = #{problemId}
+          AND tp.problem_id = #{problemId}
           AND s.major_id = tp.major_id
           AND s.student_year_no = tp.year_no
           AND tp.subject_id = #{subjectId};

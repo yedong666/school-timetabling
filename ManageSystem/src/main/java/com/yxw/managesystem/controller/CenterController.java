@@ -37,7 +37,27 @@ public class CenterController {
     private ITrainingPlanService trainingPlanService;
 
     @Autowired
+    private ICourseService courseService;
+
+    @Autowired
+    private ISubjectService subjectService;
+
+    @Autowired
+    private ICourseForClazzService courseForClazzService;
+
+    @Autowired
+    private ILessonService lessonService;
+
+    @Autowired
+    private IProblemService problemService;
+
+    @Autowired
+    private ITeacherTeachCourseService teacherTeachCourseService;
+
+    @Autowired
     private ISolveJobService solveJobService;
+
+    /////////////////// 排课
 
     @ApiOperation("添加若干个学生")
     @RoleLevel("ADMIN")
@@ -125,8 +145,8 @@ public class CenterController {
 
     @ApiOperation("添加若干个老师能教的课程(约束)")
     @RoleLevel("ADMIN")
-    @RequestMapping(value = "addTeacherCanTeachSubject", method = RequestMethod.POST, produces = "application/json")
-    public Result addTeacherCanTeachSubject(@RequestBody TeacherCanTeachSubjectList teacherCanTeachSubjectList) {
+    @RequestMapping(value = "addTeacherCanTeachSubjects", method = RequestMethod.POST, produces = "application/json")
+    public Result addTeacherCanTeachSubjects(@RequestBody TeacherCanTeachSubjectList teacherCanTeachSubjectList) {
         if (!teacherCanTeachSubjectService.addTeacherCanTeachSubjectList(
                 teacherCanTeachSubjectList.getTeacherCanTeachSubjectList())) {
             return Result.fail();
@@ -148,8 +168,8 @@ public class CenterController {
 
     @ApiOperation("添加若干个培养计划")
     @RoleLevel("ADMIN")
-    @RequestMapping(value = "addTrainingPlan", method = RequestMethod.POST, produces = "application/json")
-    public Result addTrainingPlan(@RequestBody TrainingPlanList trainingPlanList) {
+    @RequestMapping(value = "addTrainingPlans", method = RequestMethod.POST, produces = "application/json")
+    public Result addTrainingPlans(@RequestBody TrainingPlanList trainingPlanList) {
         if (!trainingPlanService.addTrainingPlans(trainingPlanList.getTrainingPlanList())) {
             return Result.fail();
         }
@@ -165,6 +185,94 @@ public class CenterController {
             return Result.fail();
         }
         return Result.suc(trainingPlans);
+    }
+
+    @ApiOperation("添加若干个教学科目")
+    @RoleLevel("ADMIN")
+    @RequestMapping(value = "addSubjects", method = RequestMethod.POST, produces = "application/json")
+    public Result addSubjects(SubjectList subjectList) {
+        if (!subjectService.addSubjects(subjectList.getSubjectList())) {
+            return Result.fail();
+        }
+        return Result.suc("添加教学科目成功");
+    }
+
+    @ApiOperation("获得所有教学科目")
+    @RoleLevel("ADMIN")
+    @RequestMapping(value = "getAllSubjects", method = RequestMethod.GET)
+    public Result getAllSubjects(String problemId) {
+        List<Subject> subjects = subjectService.getAllSubjects(problemId);
+        if (subjects == null) {
+            return Result.fail();
+        }
+        return Result.suc(subjects);
+    }
+
+    @ApiOperation("为每门 subject 对应生成 courses")
+    @RoleLevel("ADMIN")
+    @RequestMapping(value = "generateCourses", method = RequestMethod.GET)
+    public Result generateCourses(String problemId) {
+        if (!courseService.generateCourses(problemId)) {
+            return Result.fail();
+        }
+        return Result.suc();
+    }
+
+    @ApiOperation("获得所有课程")
+    @RoleLevel("ADMIN")
+    @RequestMapping(value = "getAllCourses", method = RequestMethod.GET)
+    public Result getAllCourses(String problemId) {
+        List<Course> courses = courseService.getAllCourses(problemId);
+        if (courses == null) {
+            return Result.fail();
+        }
+        return Result.suc(courses);
+    }
+
+    @ApiOperation("获得所有课程-班级信息")
+    @RoleLevel("ADMIN")
+    @RequestMapping(value = "getAllCourseForClazzs", method = RequestMethod.GET)
+    public Result getAllCourseForClazzs(String problemId) {
+        List<CourseForClazz> courseForClazzes =
+                courseForClazzService.getAllCourseForClazzs(problemId);
+        if (courseForClazzes == null) {
+            return Result.fail();
+        }
+        return Result.suc(courseForClazzes);
+    }
+
+    @ApiOperation("获得所有课时")
+    @RoleLevel("ADMIN")
+    @RequestMapping(value = "getAllLessons", method = RequestMethod.GET)
+    public Result getAllLessons(String problemId) {
+        List<Lesson> lessons = lessonService.getAllLessons(problemId);
+        if (lessons == null) {
+            return Result.fail();
+        }
+        return Result.suc(lessons);
+    }
+
+    @ApiOperation("获得所有问题")
+    @RoleLevel("ADMIN")
+    @RequestMapping(value = "getAllProblems", method = RequestMethod.GET)
+    public Result getAllProblems() {
+        List<Problem> problems = problemService.getAllProblems();
+        if (problems == null) {
+            return Result.fail();
+        }
+        return Result.suc(problems);
+    }
+
+    @ApiOperation("返回所有老师-教-课程")
+    @RoleLevel("ADMIN")
+    @RequestMapping(value = "getAllTeacherTeachCourse", method = RequestMethod.GET)
+    public Result getAllTeacherTeachCourse(String problemId) {
+        List<TeacherTeachCourse> teacherTeachCourses =
+                teacherTeachCourseService.getAllTeacherTeachCourses(problemId);
+        if (teacherTeachCourses == null) {
+            return Result.fail();
+        }
+        return Result.suc(teacherTeachCourses);
     }
 
     @ApiOperation("开始求解")
@@ -194,5 +302,26 @@ public class CenterController {
         if (status == null)
             return Result.fail();
         return Result.suc(status);
+    }
+
+
+    @ApiOperation("设置一次求解最长时间")
+    @RoleLevel("设置一次求解最长时间")
+    @RequestMapping(value = "setWaitSecs", method = RequestMethod.GET)
+    public Result setWaitSecs(int waitSecs) {
+        solveJobService.setWaitSecs(waitSecs);
+        return Result.suc();
+    }
+
+    ///////////// 查询
+
+    @ApiOperation("查询一个学生要上的所有 Lessons")
+    @RequestMapping(value = "getLessonsByStudentId", method = RequestMethod.GET)
+    public Result getLessonsByStudentId(String problemId, Integer studentId) {
+        List<Lesson> lessons = lessonService.getLessonsByStudentId(problemId, studentId);
+        if (lessons == null) {
+            return Result.fail();
+        }
+        return Result.suc(lessons);
     }
 }

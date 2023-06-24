@@ -13,4 +13,14 @@
     <update id="empty">
         TRUNCATE TABLE course
     </update>
+    <select id="getSelectedCourseIdsByStudentName" resultType="java.lang.Integer">
+        SELECT DISTINCT c.course_id
+        FROM student s, course_for_clazz cfc, course c
+        WHERE s.student_name = #{studentName}
+        AND s.clazz_id = cfc.clazz_id
+        AND c.course_id = cfc.course_id
+        AND s.problem_id = #{problemId}
+        AND cfc.problem_id = #{problemId}
+        AND c.problem_id = #{problemId}
+    </select>
 </mapper>

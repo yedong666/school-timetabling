@@ -8,4 +8,18 @@
     <update id="empty">
         TRUNCATE TABLE lesson
     </update>
+    <select id="getLessonsByStudentId" resultType="com.yxw.managesystem.entity.Lesson">
+        SELECT *
+        FROM lesson l
+        WHERE l.course_id IN (
+            SELECT DISTINCT c.course_id
+            FROM student s, course_for_clazz cfc, course c
+            WHERE s.student_id = #{studentId}
+                AND s.clazz_id = cfc.clazz_id
+                AND c.course_id = cfc.course_id
+                AND s.problem_id = #{problemId}
+                AND cfc.problem_id = #{problemId}
+                AND c.problem_id = #{problemId}
+        ) AND l.problem_id = #{problemId};
+    </select>
 </mapper>

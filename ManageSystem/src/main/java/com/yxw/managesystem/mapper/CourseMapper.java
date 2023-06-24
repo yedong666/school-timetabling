@@ -19,4 +19,5 @@ public interface CourseMapper extends BaseMapper<Course> {
     List<Course> selectAll(String problemId);
     void empty();
     void updateFromWeekAndToWeek(String problemId, Integer courseId, Integer fromWeek, Integer toWeek);
+    List<Integer> getSelectedCourseIdsByStudentName(String problemId, String studentName);
 }

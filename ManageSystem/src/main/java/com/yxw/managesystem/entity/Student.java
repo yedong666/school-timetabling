@@ -33,9 +33,6 @@ public class Student implements Serializable {
     @ApiModelProperty("用户名")
     private String studentName;
 
-    @ApiModelProperty("入学时间")
-    private LocalDateTime studentEnterTime;
-
     @ApiModelProperty("第几学期")
     private Integer studentYearNo;
 

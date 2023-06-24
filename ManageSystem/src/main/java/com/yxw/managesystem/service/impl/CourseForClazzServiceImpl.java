@@ -24,4 +24,14 @@ public class CourseForClazzServiceImpl extends ServiceImpl<CourseForClazzMapper,
 
     @Autowired
     private CourseForClazzMapper courseForClazzMapper;
+
+    @Override
+    public List<CourseForClazz> getAllCourseForClazzs(String problemId) {
+        try {
+            return courseForClazzMapper.selectAll(problemId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

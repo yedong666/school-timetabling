@@ -4,7 +4,10 @@ import com.yxw.managesystem.entity.Problem;
 import com.yxw.managesystem.mapper.ProblemMapper;
 import com.yxw.managesystem.service.IProblemService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <p>
@@ -17,4 +20,16 @@ import org.springframework.stereotype.Service;
 @Service
 public class ProblemServiceImpl extends ServiceImpl<ProblemMapper, Problem> implements IProblemService {
 
+    @Autowired
+    private ProblemMapper problemMapper;
+
+    @Override
+    public List<Problem> getAllProblems() {
+        try {
+            return problemMapper.selectAll();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

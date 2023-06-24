@@ -25,4 +25,9 @@ public interface ISolveJobService {
      * 停止一个求解任务
      */
     void stopSolving(String problemId);
+
+    /**
+     * 设置一次求解的最长时间, 单位为秒
+     */
+    void setWaitSecs(int waitSecs);
 }

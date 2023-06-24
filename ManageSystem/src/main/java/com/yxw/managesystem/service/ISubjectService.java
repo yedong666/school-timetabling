@@ -1,7 +1,11 @@
 package com.yxw.managesystem.service;
 
+import com.yxw.managesystem.entity.Student;
 import com.yxw.managesystem.entity.Subject;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +17,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface ISubjectService extends IService<Subject> {
 
+    boolean addSubjects(List<Subject> subjectList);
+
+    @Nullable
+    List<Subject> getAllSubjects(String problemId);
 }
