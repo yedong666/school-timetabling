@@ -3,7 +3,7 @@
     <el-container>
       <el-aside width="18%" class="scroll">
         <div class="title">
-            <el-image :src="avater"></el-image><span>管理员</span>
+            <el-image :src="avater"></el-image><span>{{user.realName}}</span>
         </div>
         <el-menu
           default-active="2"
@@ -39,9 +39,9 @@
               <span>教室管理</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item index="3-1">文章管理</el-menu-item>
-               <el-menu-item index="3-2">评论管理</el-menu-item>
-                <el-menu-item index="3-3">标签管理</el-menu-item>
+              <el-menu-item index="3-1">教室列表</el-menu-item>
+               <el-menu-item index="3-2">教室查询</el-menu-item>
+                <el-menu-item index="3-3">标签添加</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
           <el-submenu index="4">
@@ -50,8 +50,8 @@
               <span>培养计划</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item index="4-1">资源控制</el-menu-item>
-              <el-menu-item index="4-2">资源上传</el-menu-item>
+              <el-menu-item index="4-1">添加培养计划</el-menu-item>
+              <el-menu-item index="4-2">查询培养计划</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
           <el-menu-item index="5"> <i class="el-icon-s-tools"></i>网站设置</el-menu-item>
@@ -79,11 +79,16 @@ export default {
   name: 'BackManage',
   data() {
     return {
+       user: JSON.parse(localStorage.user),
        avater:'https://img2.baidu.com/it/u=1451684198,866874194&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=625',
     }
   },
   components: {
     Background,
+  },
+  mounted() {
+    let user =  JSON.parse(localStorage.user);
+    console.log(user)
   },
   methods:{
     goTo(path){
