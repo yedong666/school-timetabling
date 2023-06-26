@@ -315,10 +315,10 @@ public class CenterController {
 
     ///////////// 查询
 
-    @ApiOperation("查询一个学生要上的所有 Lessons")
+    @ApiOperation("查询一周一个学生要上的所有课时")
     @RequestMapping(value = "getLessonsByStudentId", method = RequestMethod.GET)
-    public Result getLessonsByStudentId(String problemId, Integer studentId) {
-        List<Lesson> lessons = lessonService.getLessonsByStudentId(problemId, studentId);
+    public Result getLessonsByStudentId(String problemId, Integer studentId, Integer week) {
+        List<Lesson> lessons = lessonService.getLessonsByStudentId(problemId, studentId, week);
         if (lessons == null) {
             return Result.fail();
         }

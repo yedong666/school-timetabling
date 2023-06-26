@@ -9,17 +9,24 @@
         TRUNCATE TABLE lesson
     </update>
     <select id="getLessonsByStudentId" resultType="com.yxw.managesystem.entity.Lesson">
-        SELECT *
-        FROM lesson l
-        WHERE l.course_id IN (
+        SELECT l.*
+        FROM lesson l, course c
+        WHERE
+        -- 这个学生应该修的课课
+        l.course_id IN (
             SELECT DISTINCT c.course_id
             FROM student s, course_for_clazz cfc, course c
             WHERE s.student_id = #{studentId}
-                AND s.clazz_id = cfc.clazz_id
-                AND c.course_id = cfc.course_id
-                AND s.problem_id = #{problemId}
-                AND cfc.problem_id = #{problemId}
-                AND c.problem_id = #{problemId}
-        ) AND l.problem_id = #{problemId};
+            AND s.clazz_id = cfc.clazz_id
+            AND c.course_id = cfc.course_id
+            AND s.problem_id = #{problemId}
+            AND cfc.problem_id = #{problemId}
+            AND c.problem_id = #{problemId})
+        -- 这周开了课
+        AND l.course_id = c.course_id
+        AND c.from_week &lt;= #{week}
+        AND c.to_week > #{week}
+        AND l.problem_id = #{problemId}
+        AND c.problem_id = #{problemId};
     </select>
 </mapper>

@@ -17,5 +17,5 @@ public interface ILessonService extends IService<Lesson> {
 
     List<Lesson> getAllLessons(String problemId);
 
-    List<Lesson> getLessonsByStudentId(String problemId, Integer studentId);
+    List<Lesson> getLessonsByStudentId(String problemId, Integer studentId, Integer week);
 }

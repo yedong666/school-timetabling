@@ -34,9 +34,9 @@ public class LessonServiceImpl extends ServiceImpl<LessonMapper, Lesson> impleme
     }
 
     @Override
-    public List<Lesson> getLessonsByStudentId(String problemId, Integer studentId) {
+    public List<Lesson> getLessonsByStudentId(String problemId, Integer studentId, Integer week) {
         try {
-            return lessonMapper.getLessonsByStudentId(problemId, studentId);
+            return lessonMapper.getLessonsByStudentId(problemId, studentId, week);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
